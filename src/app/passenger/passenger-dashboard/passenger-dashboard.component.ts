@@ -42,4 +42,8 @@ export class PassengerDashboardComponent implements OnInit {
     this.getCheckInCount()
   }
 
+  trackByFun(index : number, pass : Ipassenger){
+    return pass.id
+  }
+
 }

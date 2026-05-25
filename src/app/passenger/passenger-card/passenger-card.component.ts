@@ -13,36 +13,40 @@ import { config } from 'rxjs';
   styleUrls: ['./passenger-card.component.scss']
 })
 export class PassengerCardComponent implements OnInit {
-  isInEditMode : boolean = false
+  isInEditMode: boolean = false
   @ViewChild('fullName') fullName !: ElementRef
   @Input() passObj !: Ipassenger
-  @Output() emitCheckedInflag : EventEmitter<boolean> = new EventEmitter<boolean>()
+  @Output() emitCheckedInflag: EventEmitter<boolean> = new EventEmitter<boolean>()
   constructor(
-    private _passService : PassengerService,
-    private _snackBar : SnackBarService,
-    private _matDialog : MatDialog
+    private _passService: PassengerService,
+    private _snackBar: SnackBarService,
+    private _matDialog: MatDialog
   ) { }
 
   ngOnInit(): void {
   }
 
-  onUpdate(){
-    this.passObj.fullname = this.fullName.nativeElement.value
-    console.log(this.passObj);
-    this._passService.updatedPassenger(this.passObj)
-    .subscribe({
-      next : res => {
-        this._snackBar.openSnackBar(res.msg)
-        this.isInEditMode = false
-      },
-      error : err => {
-         this._snackBar.openSnackBar(err.msg)
-      }
-    })
-   
+  onUpdate() {
+    let fullNameVal = this.fullName.nativeElement.value
+
+    if (fullNameVal.length > 0) {
+      this.passObj.fullname = this.fullName.nativeElement.value
+      console.log(this.passObj);
+
+      this._passService.updatedPassenger(this.passObj)
+        .subscribe({
+          next: res => {
+            this._snackBar.openSnackBar(res.msg)
+            this.isInEditMode = false
+          },
+          error: err => {
+            this._snackBar.openSnackBar(err.msg)
+          }
+        })
+    }
   }
 
-  onRemove(id : number){
+  onRemove(id: number) {
 
     let config = new MatDialogConfig()
     config.width = '350px'
@@ -50,19 +54,19 @@ export class PassengerCardComponent implements OnInit {
     config.data = `Are you sure, you want to remove the passenger with id ${id} ?`
     let matR = this._matDialog.open(GetConfirmComponent, config)
     matR.afterClosed().subscribe(confirm => {
-      if(confirm){
+      if (confirm) {
         this._passService.removePassenger(id)
-        .subscribe({
-          next : res => {
+          .subscribe({
+            next: res => {
               this._snackBar.openSnackBar(res.msg)
-              if(this.passObj.checkedIn){
+              if (this.passObj.checkedIn) {
                 this.emitCheckedInflag.emit(true)
               }
-          },
-          error : err => {
-            this._snackBar.openSnackBar(err.msg)
-          }
-        })
+            },
+            error: err => {
+              this._snackBar.openSnackBar(err.msg)
+            }
+          })
       }
     })
   }

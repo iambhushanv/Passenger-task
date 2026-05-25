@@ -6,7 +6,7 @@
             [totalCount]="passArr.length"
             >
             </app-passenger-count>
-            <div class="card mb-4">
+            <div class="card mb-4" *ngIf="passArr.length > 0 ; else noPassenger">
                 <div class="card-body">
                     <ul class="list-group">
                         <li 
@@ -17,6 +17,11 @@
                     </ul>
                 </div> 
             </div>
+            <ng-template #noPassenger>
+                <p class="alert alert-info">
+                    No Passengers !!!
+                </p>
+            </ng-template>
             <app-passenger-card
             (emitCheckedInflag)="getRemoveFlag($event)"
             [passObj]="pass"

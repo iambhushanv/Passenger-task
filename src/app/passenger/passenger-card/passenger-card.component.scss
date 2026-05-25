@@ -1,0 +1,27 @@
+.form-control:disabled {
+    background-color: transparent;
+    opacity: 1;
+    border: transparent;
+}
+
+.fullnameControl {
+    position: relative;
+    padding-left: 10px;
+}
+
+.fullnameControl::after {
+    content: '';
+    background-color: orange;
+    position: absolute;
+    height: 15px;
+    width: 15px;
+    top: 11px;
+    left: -10px;
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.fullnameControl.checkedIn::after {
+    background-color: green;
+}
